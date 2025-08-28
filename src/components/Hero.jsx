@@ -11,26 +11,39 @@ const Hero = () => {
     const isMobile = useMediaQuery({maxWidth: 767})
 
     useGSAP(() => {
-        const heroSplit = new SplitText('.title', {type: 'chars, words'});
+        // Wait for fonts to load before initializing SplitText
+        const initAnimations = () => {
+            const heroSplit = new SplitText('.title', {type: 'chars, words'});
+            const paragraphSplit = new SplitText('.subtitle', {type: 'lines'});
 
-        const paragraphSplit = new SplitText('.subtitle', {type: 'lines'});
+            heroSplit.chars.forEach((char) => char.classList.add('text-gradient'));
 
-        heroSplit.chars.forEach((char) => char.classList.add('text-gradient'));
+            gsap.from(heroSplit.chars, {
+                yPercent: 100,
+                duration: 1.8,
+                ease: 'expo.out',
+                stagger: 0.06
+            })
+            gsap.from(paragraphSplit.lines, {
+                opacity: 0,
+                yPercent: 100,
+                duration: 1.8,
+                ease: 'expo.out',
+                stagger: 0.06,
+                delay: 1,
+            })
+        };
 
-        gsap.from(heroSplit.chars, {
-            yPercent: 100,
-            duration: 1.8,
-            ease: 'expo.out',
-            stagger: 0.06
-        })
-        gsap.from(paragraphSplit.lines, {
-            opacity: 0,
-            yPercent: 100,
-            duration: 1.8,
-            ease: 'expo.out',
-            stagger: 0.06,
-            delay: 1,
-        })
+        // Check if fonts are loaded
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => {
+                initAnimations();
+            });
+        } else {
+            // Fallback for browsers without FontFaceSet API
+            setTimeout(initAnimations, 100);
+        }
+
         gsap.timeline({
             scrollTrigger: {
                 trigger: '#hero',
