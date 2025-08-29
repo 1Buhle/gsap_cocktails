@@ -5,6 +5,7 @@ import Hero from "./components/Hero.jsx";
 import Cocktails from "./components/Cocktails.jsx";
 import About from "./components/About.jsx";
 import { Analytics } from "@vercel/analytics/react"
+import Art from "./components/Art.jsx";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -15,6 +16,7 @@ const App = () => {
             <Hero />
             <Cocktails />
             <About />
+            <Art />
 
         </main>
     )
